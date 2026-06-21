@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Driving School Germany - Roblox driving game with license tests, taxi jobs, daily tasks and a clear rank system.">
+<title>Driving School Germany</title>
+<style>
+:root{
+  --sky:#7bdcff;
+  --sky-soft:#c9f4ff;
+  --grass:#55c965;
+  --grass-deep:#3ca851;
+  --dark:#172033;
+  --ink:#172033;
+  --muted:#526072;
+  --yellow:#ffd43b;
+  --blue:#2f80ff;
+  --purple:#8b5cf6;
+  --soft:#eef4ff;
+  --white:#fff;
+  --danger:#ff4b4b;
+  --shadow:0 8px 0 rgba(0,0,0,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--ink);
+  background:linear-gradient(var(--sky) 0%,var(--sky-soft) 42%,#70dd72 42%,var(--grass-deep) 100%);
+  min-height:100vh;
+}
+button,input,textarea{font:inherit}
+button{color:inherit}
+a{color:inherit}
+.container{max-width:1080px;margin:0 auto;padding:0 20px}
+.nav-wrap{padding:18px 0 8px;position:sticky;top:0;z-index:20}
+.nav{
+  background:rgba(255,255,255,.96);
+  border:4px solid var(--ink);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+.logo{display:flex;align-items:center;gap:11px;font-size:20px;font-weight:900;white-space:nowrap}
+.logo-icon{
+  width:46px;height:46px;border-radius:15px;background:var(--yellow);
+  border:3px solid var(--ink);display:grid;place-items:center;font-size:24px;line-height:1
+}
+.menu{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.menu button,.hub-card{
+  border:3px solid var(--ink);
+  border-radius:14px;
+  background:#edf3ff;
+  padding:10px 13px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 4px 0 rgba(0,0,0,.12);
+  transition:transform .12s ease,background .12s ease,box-shadow .12s ease;
+  color:var(--ink);
+}
+.menu button:hover,.menu button.active,.menu button[aria-current="page"]{background:var(--yellow);transform:translateY(-2px)}
+.menu button:focus-visible,.btn:focus-visible,.hub-card:focus-visible,.input:focus-visible,.textarea:focus-visible{
+  outline:4px solid rgba(47,128,255,.55);
+  outline-offset:3px;
+}
+.page{display:none}
+.page.active{display:block}
+.hero{
+  display:grid;
+  grid-template-columns:1.04fr .96fr;
+  gap:34px;
+  align-items:center;
+  padding:48px 0 42px;
+}
+.tag{
+  display:inline-block;
+  background:var(--yellow);
+  border:4px solid var(--ink);
+  border-radius:16px;
+  padding:10px 14px;
+  font-weight:900;
+  box-shadow:0 6px 0 rgba(0,0,0,.14);
+  transform:rotate(-2deg);
+  margin-bottom:18px;
+}
+h1{
+  font-size:4.75rem;
+  line-height:.95;
+  letter-spacing:0;
+  text-transform:uppercase;
+  text-shadow:0 5px 0 rgba(0,0,0,.1);
+  margin-bottom:20px;
+}
+h2.title{
+  font-size:2.65rem;
+  line-height:1;
+  letter-spacing:0;
+  text-transform:uppercase;
+  margin-bottom:12px;
+  text-shadow:0 4px 0 rgba(0,0,0,.08);
+}
+.blue{color:var(--blue)}
+.purple{color:var(--purple)}
+.lead{font-size:20px;line-height:1.5;color:#27324a;font-weight:800;max-width:650px;margin-bottom:25px}
+.btns{display:flex;gap:13px;flex-wrap:wrap;margin:22px 0 26px}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  border:4px solid var(--ink);
+  border-radius:16px;
+  padding:14px 20px;
+  font-weight:900;
+  background:var(--white);
+  box-shadow:0 8px 0 rgba(0,0,0,.15);
+  cursor:pointer;
+  transition:transform .12s ease,box-shadow .12s ease;
+  color:var(--ink);
+  text-decoration:none;
+}
+.btn:hover{transform:translateY(-4px);box-shadow:0 12px 0 rgba(0,0,0,.14)}
+.btn.play{background:var(--yellow)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{
+  background:var(--white);
+  border:4px solid var(--ink);
+  border-radius:18px;
+  padding:15px;
+  box-shadow:0 7px 0 rgba(0,0,0,.13);
+  text-align:center;
+}
+.stat b{display:block;font-size:28px;line-height:1}
+.stat span{font-size:13px;color:var(--muted);font-weight:900}
+.game-preview{position:relative;min-height:500px;max-width:430px;margin-left:auto;margin-right:auto}
+.road{
+  position:absolute;
+  left:50%;top:0;
+  transform:translateX(-50%) perspective(520px) rotateX(18deg);
+  width:290px;height:500px;
+  background:linear-gradient(90deg,#252a33,#343b48,#252a33);
+  border-left:9px solid #20242c;
+  border-right:9px solid #20242c;
+  border-radius:26px;
+  overflow:hidden;
+  box-shadow:0 22px 0 rgba(0,0,0,.12);
+}
+.road:before{
+  content:"";
+  position:absolute;
+  left:50%;top:-20px;
+  width:14px;height:610px;
+  transform:translateX(-50%);
+  background:repeating-linear-gradient(to bottom,var(--yellow) 0 34px,transparent 34px 68px);
+}
+.road-sign{
+  position:absolute;
+  left:6px;
+  bottom:105px;
+  width:78px;
+  background:var(--white);
+  border:4px solid var(--ink);
+  border-radius:14px;
+  padding:8px 5px;
+  box-shadow:0 7px 0 rgba(0,0,0,.13);
+  text-align:center;
+  font-weight:900;
+  font-size:13px;
+}
+.road-sign:after{
+  content:"";
+  position:absolute;
+  left:50%;top:100%;
+  width:8px;height:46px;
+  background:var(--ink);
+  transform:translateX(-50%);
+}
+.car{
+  position:absolute;
+  left:50%;bottom:58px;
+  transform:translateX(-50%);
+  width:124px;height:195px;
+  background:var(--danger);
+  border:5px solid var(--ink);
+  border-radius:31px 31px 20px 20px;
+  box-shadow:0 11px 0 rgba(0,0,0,.22);
+}
+.car:before{
+  content:"";
+  position:absolute;
+  left:18px;right:18px;top:29px;
+  height:52px;
+  background:#9fe8ff;
+  border:4px solid var(--ink);
+  border-radius:16px;
+}
+.car:after{
+  content:"";
+  position:absolute;
+  left:22px;right:22px;bottom:30px;
+  height:36px;
+  background:var(--yellow);
+  border:4px solid var(--ink);
+  border-radius:13px;
+}
+.wheel{position:absolute;width:24px;height:52px;background:#101827;border:4px solid var(--ink);border-radius:14px}
+.wheel.left{left:-17px;top:76px}
+.wheel.right{right:-17px;top:76px}
+.mini-ui{
+  position:absolute;
+  right:-5px;top:25px;
+  width:235px;
+  background:var(--white);
+  border:4px solid var(--ink);
+  border-radius:22px;
+  padding:15px;
+  box-shadow:0 9px 0 rgba(0,0,0,.15);
+}
+.mini-ui h3{font-size:23px;color:var(--purple);margin-bottom:8px}
+.bar{height:13px;background:#e5e7eb;border:3px solid var(--ink);border-radius:999px;overflow:hidden;margin:10px 0}
+.bar span{display:block;width:74%;height:100%;background:var(--purple)}
+.task{
+  margin-top:10px;
+  background:var(--soft);
+  border:3px solid var(--ink);
+  border-radius:14px;
+  padding:10px;
+  font-weight:900;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+.section{padding:45px 0}
+.sub{color:#27324a;font-size:18px;font-weight:800;margin-bottom:24px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card,.hub-card{
+  background:var(--white);
+  border:4px solid var(--ink);
+  border-radius:22px;
+  padding:22px;
+  box-shadow:var(--shadow);
+  text-align:left;
+}
+.hub-card{width:100%}
+.card h3,.hub-card h3{font-size:22px;margin-bottom:10px}
+.card p,.card li,.hub-card p{color:var(--muted);font-weight:800;line-height:1.45}
+.icon{font-size:36px;margin-bottom:12px;line-height:1}
+.rankgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:12px}
+.rank{
+  background:var(--white);
+  border:4px solid var(--ink);
+  border-radius:18px;
+  padding:17px 8px;
+  box-shadow:0 7px 0 rgba(0,0,0,.13);
+  font-weight:900;
+  text-align:center;
+}
+.rank small{color:var(--muted)}
+.dot{width:24px;height:24px;border:3px solid var(--ink);border-radius:50%;margin:0 auto 8px}
+.log{display:grid;gap:12px}
+.logitem{
+  background:var(--soft);
+  border:3px solid var(--ink);
+  border-radius:16px;
+  padding:13px;
+  font-weight:900;
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+}
+.form{display:grid;gap:12px}
+.field{display:grid;gap:7px}
+.field span{font-weight:900}
+.input,.textarea{
+  width:100%;
+  background:var(--soft);
+  border:3px solid var(--ink);
+  border-radius:14px;
+  padding:13px;
+  font-weight:800;
+  font-family:inherit;
+}
+.textarea{min-height:140px;resize:vertical}
+.form-note{display:none;background:#dff8e7;border:3px solid var(--ink);border-radius:14px;padding:12px;font-weight:900}
+.form-note.show{display:block}
+.cta{
+  background:var(--white);
+  border:5px solid var(--ink);
+  border-radius:30px;
+  padding:38px 22px;
+  box-shadow:0 12px 0 rgba(0,0,0,.15);
+  text-align:center;
+  margin-bottom:55px;
+}
+.cta h2{font-size:2.55rem;line-height:1.05;text-transform:uppercase;margin-bottom:12px}
+.cta p{color:#27324a;font-size:19px;font-weight:800;margin-bottom:20px}
+footer{background:var(--ink);color:var(--white);text-align:center;font-weight:900;padding:26px;margin-top:40px}
+@media(max-width:900px){
+  .hero,.grid2{grid-template-columns:1fr}
+  .grid4{grid-template-columns:1fr 1fr}
+  .rankgrid{grid-template-columns:1fr 1fr}
+  .stats{grid-template-columns:1fr}
+  .nav{align-items:flex-start;flex-direction:column}
+  .menu{width:100%;display:flex;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;justify-content:flex-start}
+  .menu button{flex:0 0 auto}
+  .mini-ui{right:50%;transform:translateX(50%);top:12px}
+  .road-sign{left:12px;bottom:90px}
+  .game-preview{min-height:610px}
+  h1{font-size:3.5rem}
+}
+@media(max-width:540px){
+  .container{padding:0 14px}
+  .grid4{grid-template-columns:1fr}
+  .nav{border-width:3px;border-radius:18px}
+  .logo{font-size:17px}
+  h1{font-size:2.55rem}
+  h2.title{font-size:2rem}
+  .cta h2{font-size:2rem}
+  .lead{font-size:18px}
+  .game-preview{min-height:560px}
+  .road{width:245px;height:465px}
+  .car{width:108px;height:172px}
+}
+</style>
+</head>
+<body>
+<div class="nav-wrap">
+  <div class="container">
+    <nav class="nav" aria-label="Hauptnavigation">
+      <div class="logo"><span class="logo-icon" aria-hidden="true">&#128663;</span><span>Driving School Germany</span></div>
+      <div class="menu">
+        <button class="active" type="button" data-page="home" aria-current="page">Home</button>
+        <button type="button" data-page="ranks">Ranks</button>
+        <button type="button" data-page="updates">Updates</button>
+        <button type="button" data-page="feedback">Feedback</button>
+        <button type="button" data-page="play">Play</button>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<main>
+  <section id="home" class="page active" aria-labelledby="home-title">
+    <div class="container hero">
+      <div>
+        <div class="tag">&#127465;&#127466; Roblox Driving Game</div>
+        <h1 id="home-title">Bestehe den Test.<br><span class="blue">Fahr durch Deutschland.</span></h1>
+        <p class="lead">Mach deinen Fuehrerschein, halte dich an die Verkehrsregeln, fahre Taxi-Jobs, erledige Daily Tasks und arbeite dich bis zum Elite Driver hoch.</p>
+        <div class="btns">
+          <a class="btn play" href="https://www.roblox.com/search/experiences?keyword=Driving%20School%20Germany" target="_blank" rel="noopener">&#9654; Play on Roblox</a>
+          <button class="btn" type="button" data-page="updates">&#128663; Latest Updates</button>
+        </div>
+        <div class="stats" aria-label="Game Features">
+          <div class="stat"><b>License</b><span>Theory + driving test</span></div>
+          <div class="stat"><b>Taxi</b><span>Jobs and rewards</span></div>
+          <div class="stat"><b>Ranks</b><span>Progress every day</span></div>
+        </div>
+      </div>
+      <div class="game-preview" aria-label="Cartoon preview of the driving game">
+        <div class="road"></div>
+        <div class="road-sign">DSG<br>City</div>
+        <div class="car"><span class="wheel left"></span><span class="wheel right"></span></div>
+        <div class="mini-ui">
+          <h3>&#128995; Elite Driver</h3>
+          <strong>12,430 Points</strong>
+          <div class="bar" aria-hidden="true"><span></span></div>
+          <div class="task"><span>Daily</span><span>Drive 5 km</span></div>
+          <div class="task"><span>Taxi</span><span>Happy Passenger</span></div>
+          <div class="task"><span>License</span><span>Passed &#10003;</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container section">
+      <h2 class="title">Game Hub</h2>
+      <p class="sub">Alles Wichtige auf klaren Seiten: Ranks, Updates, Feedback und direkter Roblox-Start.</p>
+      <div class="grid4">
+        <button class="hub-card" type="button" data-page="ranks"><div class="icon" aria-hidden="true">&#127942;</div><h3>Ranks</h3><p>Sieh, wie Punkte zu Status werden.</p></button>
+        <button class="hub-card" type="button" data-page="updates"><div class="icon" aria-hidden="true">&#128295;</div><h3>Update Log</h3><p>Die neuesten DSG-Aenderungen sauber geordnet.</p></button>
+        <button class="hub-card" type="button" data-page="feedback"><div class="icon" aria-hidden="true">&#128172;</div><h3>Feedback</h3><p>Melde Ideen, Bugs und UI-Wuensche.</p></button>
+        <button class="hub-card" type="button" data-page="play"><div class="icon" aria-hidden="true">&#127918;</div><h3>Play</h3><p>Starte deine Driving-School-Reise.</p></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="ranks" class="page" aria-labelledby="ranks-title">
+    <div class="container section">
+      <h1 id="ranks-title"><span class="purple">Rank</span> System</h1>
+      <p class="lead">Sammle Punkte durch sauberes Fahren, Taxi-Jobs, Daily Tasks, Tests und City-Erkundung. Dein Rank zeigt sofort, wie weit du in Driving School Germany bist.</p>
+      <div class="rankgrid">
+        <div class="rank"><div class="dot" style="background:#d1d5db"></div>Learner<br><small>0+</small></div>
+        <div class="rank"><div class="dot" style="background:#2f80ff"></div>Novice<br><small>250+</small></div>
+        <div class="rank"><div class="dot" style="background:#2fd86b"></div>Skilled<br><small>1,000+</small></div>
+        <div class="rank"><div class="dot" style="background:#ffd43b"></div>Experienced<br><small>2,500+</small></div>
+        <div class="rank"><div class="dot" style="background:#ff9f1a"></div>Expert<br><small>5,000+</small></div>
+        <div class="rank"><div class="dot" style="background:#ff4b4b"></div>Instructor<br><small>8,000+</small></div>
+        <div class="rank"><div class="dot" style="background:#8b5cf6"></div>Elite<br><small>12,000+</small></div>
+      </div>
+    </div>
+    <div class="container section">
+      <div class="grid2">
+        <div class="card"><h3>Warum Ranks?</h3><p>Punkte fuehlen sich besser an, wenn sie Fortschritt zeigen. Ranks machen Skill, Aktivitaet und Status direkt sichtbar.</p></div>
+        <div class="card"><h3>Wie bekomme ich Punkte?</h3><p>Taxi-Jobs, Daily Tasks, Pruefungen, sauberes Fahren, Erkundung und Events helfen dir beim Aufstieg.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="updates" class="page" aria-labelledby="updates-title">
+    <div class="container section">
+      <h1 id="updates-title">Update Log</h1>
+      <p class="lead">Eine klare Uebersicht fuer die wichtigsten Driving School Germany Updates.</p>
+      <div class="grid2">
+        <div class="card">
+          <h3>&#128661; Taxi Job 2.0</h3>
+          <div class="log">
+            <div class="logitem"><span aria-hidden="true">&#128101;</span><span>1-3 Passagiere pro Fahrt</span></div>
+            <div class="logitem"><span aria-hidden="true">&#11088;</span><span>Happy Passenger und seltene Passagiere</span></div>
+            <div class="logitem"><span aria-hidden="true">&#128202;</span><span>Bessere Ratings und fairere Rewards</span></div>
+            <div class="logitem"><span aria-hidden="true">&#128694;</span><span>Passagiere steigen sichtbar ein und aus</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>&#127942; Progress Update</h3>
+          <div class="log">
+            <div class="logitem"><span aria-hidden="true">&#128995;</span><span>Neues Rank-System</span></div>
+            <div class="logitem"><span aria-hidden="true">&#128203;</span><span>Daily Tasks nach License Progress</span></div>
+            <div class="logitem"><span aria-hidden="true">&#128260;</span><span>Daily Tasks mit Rewarded Ads neu laden</span></div>
+            <div class="logitem"><span aria-hidden="true">&#128101;</span><span>Ranks sichtbar in der Player List</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="feedback" class="page" aria-labelledby="feedback-title">
+    <div class="container section">
+      <h1 id="feedback-title">Feedback</h1>
+      <p class="lead">Bug gefunden oder eine Idee? Gutes Feedback macht Driving School Germany schneller, fairer und besser spielbar.</p>
+      <div class="grid2">
+        <div class="card">
+          <h3>&#128172; Send Feedback</h3>
+          <form class="form" id="feedback-form">
+            <label class="field">
+              <span>Roblox Username</span>
+              <input class="input" name="username" autocomplete="nickname" placeholder="z.B. DSG_Player123">
+            </label>
+            <label class="field">
+              <span>Feedback Type</span>
+              <input class="input" name="type" placeholder="Bug / Idea / UI / Car / Map">
+            </label>
+            <label class="field">
+              <span>Message</span>
+              <textarea class="textarea" name="message" placeholder="Was ist passiert? Wo ist es passiert? Auf welchem Geraet spielst du?"></textarea>
+            </label>
+            <button class="btn play" type="submit">Submit Feedback</button>
+            <p class="form-note" id="form-note" role="status">Danke! Dein Feedback ist vorbereitet. Verbinde das Formular spaeter mit Discord, Google Forms oder deinem Backend.</p>
+          </form>
+        </div>
+        <div class="card">
+          <h3>Was hilft am meisten?</h3>
+          <p>Schreib kurz, was passiert ist, wo es passiert ist und ob du auf PC, Mobile, Tablet oder Konsole gespielt hast. Screenshots oder kurze Clips helfen besonders bei UI- und Fahrzeug-Bugs.</p>
+          <br>
+          <p><b>TikTok:</b> @driving_school.rblx</p>
+          <p><b>Game:</b> Driving School Germany</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="play" class="page" aria-labelledby="play-title">
+    <div class="container section">
+      <div class="cta">
+        <h2 id="play-title">Bereit fuer den Test?</h2>
+        <p>Halte die Regeln ein, beweise deine Skills und werde Elite Driver.</p>
+        <a class="btn play" href="https://www.roblox.com/search/experiences?keyword=Driving%20School%20Germany" target="_blank" rel="noopener">Play Driving School Germany</a>
+      </div>
+      <div class="grid4">
+        <div class="card"><div class="icon" aria-hidden="true">&#128218;</div><h3>1. Theory</h3><p>Lerne Verkehrsregeln und Zeichen.</p></div>
+        <div class="card"><div class="icon" aria-hidden="true">&#128663;</div><h3>2. Practice</h3><p>Bestehe deinen Driving Test.</p></div>
+        <div class="card"><div class="icon" aria-hidden="true">&#128661;</div><h3>3. Taxi</h3><p>Verdiene Punkte mit Jobs.</p></div>
+        <div class="card"><div class="icon" aria-hidden="true">&#127942;</div><h3>4. Rank Up</h3><p>Arbeite dich bis Elite Driver hoch.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>Driving School Germany &middot; TikTok: @driving_school.rblx</footer>
+
+<script>
+  const buttons = document.querySelectorAll("[data-page]");
+  const pages = document.querySelectorAll(".page");
+  const navButtons = document.querySelectorAll(".menu button");
+  const feedbackForm = document.querySelector("#feedback-form");
+  const formNote = document.querySelector("#form-note");
+
+  function showPage(id){
+    pages.forEach(function(page){
+      page.classList.toggle("active", page.id === id);
+    });
+    navButtons.forEach(function(button){
+      const isActive = button.dataset.page === id;
+      button.classList.toggle("active", isActive);
+      if(isActive){
+        button.setAttribute("aria-current", "page");
+      }else{
+        button.removeAttribute("aria-current");
+      }
+    });
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  buttons.forEach(function(button){
+    button.addEventListener("click", function(){
+      showPage(button.dataset.page);
+    });
+  });
+
+  feedbackForm.addEventListener("submit", function(event){
+    event.preventDefault();
+    formNote.classList.add("show");
+  });
+</script>
+</body>
+</html>
