@@ -56,6 +56,8 @@ body:before{
 button{font:inherit}
 button{color:inherit}
 a{color:inherit}
+button,a{-webkit-tap-highlight-color:rgba(47,128,255,.18)}
+.btn,.menu button,.feature-row,.home-update-link,.footer-link,.to-top,.logo{touch-action:manipulation}
 .container{max-width:1320px;margin:0 auto;padding:0 20px}
 .nav-wrap{padding:18px 0 8px;position:sticky;top:0;z-index:30}
 .nav{
@@ -552,7 +554,7 @@ h3{line-height:1.12}
   box-shadow:0 4px 0 rgba(0,0,0,.12);
 }
 .version-title strong{display:block;font-size:22px;margin-bottom:4px}
-.version-title span{color:var(--muted);font-size:14px}
+.version-title span{color:var(--muted);font-size:14px;overflow-wrap:anywhere}
 .version-toggle{
   width:38px;
   height:38px;
@@ -731,29 +733,152 @@ footer:before{
   h1{font-size:3.55rem}
   .section-head{align-items:flex-start;flex-direction:column}
 }
+@media(max-width:760px){
+  .container{padding:0 16px}
+  .nav-wrap{padding:10px 0 6px}
+  .nav{
+    gap:10px;
+    padding:10px;
+    border-width:3px;
+    border-radius:18px;
+    box-shadow:0 5px 0 rgba(0,0,0,.12);
+  }
+  .logo{width:100%;font-size:18px;gap:9px}
+  .logo-icon{width:40px;height:40px;border-radius:13px;font-size:21px;border-width:3px}
+  .menu{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:7px;
+    overflow:visible;
+    padding-bottom:0;
+  }
+  .menu button{
+    min-width:0;
+    min-height:42px;
+    padding:8px 6px;
+    border-width:3px;
+    border-radius:12px;
+    font-size:13px;
+    line-height:1;
+    text-align:center;
+  }
+  #home .container.hero{padding-left:14px;padding-right:14px}
+  .hero{
+    min-height:calc(100svh - 112px);
+    padding:34px 14px 82px;
+    gap:12px;
+  }
+  .hero-copy{max-width:100%}
+  .tag{font-size:13px;border-width:3px;border-radius:14px;padding:8px 10px;margin-bottom:14px}
+  h1{font-size:clamp(2.7rem,13.5vw,4.2rem);line-height:.86;text-shadow:0 5px 0 rgba(0,0,0,.12)}
+  .page:not(#home) h1{font-size:clamp(2.6rem,12vw,4rem);line-height:.92}
+  h2.title{font-size:clamp(2rem,9vw,2.55rem)}
+  .lead{font-size:17px;line-height:1.45;max-width:36rem;margin-bottom:18px}
+  .sub{font-size:16px;line-height:1.45}
+  .section{padding:58px 0;scroll-margin-top:132px}
+  .section-head{gap:12px;margin-bottom:18px}
+  .btns{display:grid;grid-template-columns:1fr;gap:10px;width:min(100%,380px);margin:18px auto 22px}
+  .btn{
+    width:100%;
+    min-height:48px;
+    padding:12px 14px;
+    border-width:3px;
+    border-radius:14px;
+    box-shadow:0 6px 0 rgba(0,0,0,.14);
+    text-align:center;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 8px 0 rgba(0,0,0,.13)}
+  .hero .btn.play{font-size:18px;padding:14px 18px;border-radius:16px}
+  .hero-road{
+    width:min(100%,460px);
+    height:210px;
+    margin-top:18px;
+    border-width:4px;
+    border-radius:24px;
+    box-shadow:0 10px 0 rgba(0,0,0,.15);
+  }
+  .hero-road:before{width:12px;height:350px;top:-70px;background:repeating-linear-gradient(to bottom,var(--yellow) 0 28px,transparent 28px 56px)}
+  .hero-car{
+    width:92px;
+    height:130px;
+    bottom:18px;
+    border-width:4px;
+    border-radius:24px 24px 17px 17px;
+  }
+  .hero-car:before{left:13px;right:13px;top:20px;height:36px;border-width:3px;border-radius:12px}
+  .hero-car:after{left:16px;right:16px;bottom:20px;height:26px;border-width:3px;border-radius:10px}
+  .hero-car .wheel{width:19px;height:42px;border-width:3px;top:54px}
+  .hero-car .wheel.left{left:-13px}
+  .hero-car .wheel.right{right:-13px}
+  .grid2,.grid3,.grid4,.flow,.rank-preview,.legal-grid{grid-template-columns:1fr;gap:14px}
+  .card,.hub-card,.update-card,.step-card,.rank-line,.legal-card{
+    border-width:3px;
+    border-radius:18px;
+    padding:18px;
+    box-shadow:0 6px 0 rgba(0,0,0,.13);
+  }
+  .card h3,.hub-card h3,.update-card h3,.step-card h3{font-size:20px}
+  .card p,.card li,.hub-card p,.update-card p,.step-card p{font-size:15px}
+  .update-list{gap:8px}
+  .update-list span{border-width:2px;border-radius:12px;padding:9px;font-size:15px}
+  .feature-row{grid-template-columns:auto 1fr;padding:17px;border-width:3px;border-radius:18px;box-shadow:0 6px 0 rgba(0,0,0,.13)}
+  .feature-arrow{display:none}
+  .feature-row h3{font-size:20px}
+  .feature-row p{font-size:15px}
+  .rankgrid{grid-template-columns:1fr 1fr;gap:10px}
+  .rank{border-width:3px;border-radius:16px;padding:14px 8px;box-shadow:0 6px 0 rgba(0,0,0,.13)}
+  .rank-row{grid-template-columns:82px 1fr 48px;gap:8px;font-size:14px}
+  .version{border-width:3px;border-radius:18px;box-shadow:0 6px 0 rgba(0,0,0,.13)}
+  .version summary{grid-template-columns:1fr auto;gap:10px;padding:15px}
+  .version-badge{grid-column:1 / -1;width:max-content;border-width:3px;border-radius:12px;padding:7px 9px}
+  .version-title strong{font-size:20px}
+  .version-title span{font-size:13px;line-height:1.35}
+  .version-body{border-top-width:3px;padding:14px}
+  .version-grid{gap:12px}
+  .version-panel{border-width:2px;border-radius:14px;padding:13px}
+  .version-panel li{font-size:15px;line-height:1.38}
+  footer{padding:78px 0 36px;margin-top:20px}
+  .social-dot{width:48px;height:48px}
+  .footer-columns{gap:22px;margin-bottom:34px}
+}
 @media(max-width:620px){
   .container{padding:0 14px}
-  .grid4,.grid3,.flow,.stats{grid-template-columns:1fr}
-  .feature-row{grid-template-columns:auto 1fr;padding:17px}
-  .feature-arrow{display:none}
-  .nav{border-width:3px;border-radius:18px}
-  .logo{font-size:17px}
-  h1{font-size:2.55rem}
-  .page:not(#home) h1{font-size:2.65rem;line-height:.95}
-  h2.title{font-size:2rem}
   .cta h2{font-size:2rem}
-  .lead{font-size:18px}
-  .hero{min-height:auto;padding:46px 14px 90px}
-  .hero .btn.play{font-size:18px;padding:15px 22px}
   .brand-footer{font-size:2.35rem}
   .game-preview{min-height:560px}
   .road{width:245px;height:465px}
   .car{width:108px;height:172px}
-  .rank-row{grid-template-columns:92px 1fr 52px;font-size:14px}
-  .version summary{grid-template-columns:1fr auto;gap:10px}
-  .version-badge{grid-column:1 / -1;width:max-content}
-  .version-body{padding:14px}
   .to-top{right:14px;bottom:14px;width:48px;height:48px;border-radius:14px}
+}
+@media(max-width:420px){
+  .container{padding:0 12px}
+  .nav-wrap{padding:8px 0 5px}
+  .nav{padding:8px;border-radius:16px;gap:8px}
+  .logo{font-size:16px;gap:8px}
+  .logo-icon{width:36px;height:36px;border-radius:12px;font-size:19px}
+  .menu{gap:6px}
+  .menu button{min-height:38px;padding:8px 3px;border-width:2px;border-radius:10px;font-size:12px;box-shadow:0 3px 0 rgba(0,0,0,.12)}
+  #home .container.hero{padding-left:12px;padding-right:12px}
+  .hero{min-height:auto;padding:30px 12px 72px}
+  .tag{font-size:12px;padding:7px 9px;margin-bottom:12px}
+  h1{font-size:clamp(2.25rem,14vw,3.25rem);text-shadow:0 4px 0 rgba(0,0,0,.12)}
+  .page:not(#home) h1{font-size:2.35rem}
+  h2.title{font-size:1.85rem}
+  .lead{font-size:16px}
+  .hero-road{height:188px;border-radius:22px}
+  .hero-car{width:80px;height:114px;bottom:16px}
+  .hero-car:before{left:11px;right:11px;top:18px;height:31px}
+  .hero-car:after{left:14px;right:14px;bottom:18px;height:23px}
+  .hero-car .wheel{width:17px;height:37px;top:48px}
+  .card,.hub-card,.update-card,.step-card,.rank-line,.legal-card{padding:16px}
+  .rankgrid{grid-template-columns:1fr}
+  .rank{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:10px;text-align:left;padding:13px 14px}
+  .rank .dot{margin:0}
+  .rank-row{grid-template-columns:1fr;gap:6px}
+  .version-title strong{font-size:18px}
+  .footer-link{font-size:18px}
+  .brand-footer{font-size:2rem}
+  .to-top{right:12px;bottom:calc(12px + env(safe-area-inset-bottom));width:46px;height:46px;border-radius:13px}
 }
 </style>
 </head>
