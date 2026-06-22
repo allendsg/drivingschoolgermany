@@ -1869,13 +1869,55 @@ footer:before{
   const revealItems = document.querySelectorAll(".reveal");
   const heroCar = document.querySelector("#hero-car");
   const toTopButton = document.querySelector(".to-top");
+  const pageIds = Array.from(pages).map(function(page){ return page.id; });
 
-  function showPage(id){
+  function normalizePage(id){
+    return pageIds.indexOf(id) >= 0 ? id : "home";
+  }
+
+  function pageFromUrl(){
+    const hashRoute = window.location.hash.replace(/^#\/?/, "").split("/")[0];
+    if(hashRoute){
+      return normalizePage(hashRoute);
+    }
+    const pathParts = window.location.pathname.split("/").filter(Boolean);
+    const pathRoute = pathParts[pathParts.length - 1];
+    if(pathRoute && pathRoute !== "index.html"){
+      return normalizePage(pathRoute);
+    }
+    return "home";
+  }
+
+  function routeBase(){
+    const parts = window.location.pathname.split("/").filter(Boolean);
+    const last = parts[parts.length - 1];
+    if(last === "index.html" || pageIds.indexOf(last) >= 0){
+      parts.pop();
+    }
+    return "/" + (parts.length ? parts.join("/") + "/" : "");
+  }
+
+  function updateUrl(id, replace){
+    const pageId = normalizePage(id);
+    const isFile = window.location.protocol === "file:";
+    const route = isFile ? "#/" + pageId : routeBase() + pageId;
+    if(isFile && window.location.hash === route){ return; }
+    if(!isFile && window.location.pathname.replace(/\/$/, "") === route.replace(/\/$/, "")){ return; }
+    if(replace){
+      window.history.replaceState({page:pageId}, "", route);
+    }else{
+      window.history.pushState({page:pageId}, "", route);
+    }
+  }
+
+  function showPage(id, options){
+    const settings = options || {};
+    const pageId = normalizePage(id);
     pages.forEach(function(page){
-      page.classList.toggle("active", page.id === id);
+      page.classList.toggle("active", page.id === pageId);
     });
     navButtons.forEach(function(button){
-      const isActive = button.dataset.page === id;
+      const isActive = button.dataset.page === pageId;
       button.classList.toggle("active", isActive);
       if(isActive){
         button.setAttribute("aria-current", "page");
@@ -1883,7 +1925,12 @@ footer:before{
         button.removeAttribute("aria-current");
       }
     });
-    window.scrollTo({top:0, behavior:"smooth"});
+    if(settings.updateUrl !== false){
+      updateUrl(pageId, settings.replaceUrl);
+    }
+    if(settings.scroll !== false){
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
   }
 
   function openUpdate(version){
@@ -1911,6 +1958,14 @@ footer:before{
       }
     });
   });
+
+  function syncPageWithUrl(){
+    showPage(pageFromUrl(), {updateUrl:false});
+  }
+
+  showPage(pageFromUrl(), {replaceUrl:true, scroll:false});
+  window.addEventListener("popstate", syncPageWithUrl);
+  window.addEventListener("hashchange", syncPageWithUrl);
 
   scrollButtons.forEach(function(button){
     button.addEventListener("click", function(){
